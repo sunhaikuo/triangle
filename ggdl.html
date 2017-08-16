@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>勾股定理</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		.wrap {
+			width: 100%;
+			position: absolute;
+			bottom: 100px;
+			text-align: center;
+		}
+
+		span {
+			display: inline-block;
+			width: 64px;
+			height: 64px;
+			background-size: 100%;
+		}
+
+		.wrap span:nth-child(1) {
+			background-image: url('./img/1.png')
+		}
+
+		.wrap span:nth-child(2) {
+			background-image: url('./img/2.png')
+		}
+
+		.wrap span:nth-child(3) {
+			background-image: url('./img/3.png')
+		}
+
+		.wrap span:nth-child(4) {
+			background-image: url('./img/4.png')
+		}
+
+		.wrap span:nth-child(5) {
+			background-image: url('./img/5.png')
+		}
+	</style>
+</head>
+
+<body>
+	<!--调试区域-->
+	<input type="text">
+	<input type="text">
+	<input type="text">
+	<input type="text">
+	<input type="text">
+	<!--业务区域-->
+	<div id="wrap" class="wrap">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<script type="text/javascript">
+		// 取出所有的小图标
+		var spans = document.getElementsByTagName('span')
+		// 取这个元素是为了算offset
+		var wrap = document.getElementById('wrap')
+		// input为调试信息，没有实现作用
+		var input = document.getElementsByTagName('input')
+
+		document.addEventListener('mousemove', function (ev) {
+			var mouseX = ev.clientX
+			var mouseY = ev.clientY
+			for (var i = 0; i < spans.length; i++) {
+				var span = spans[i]
+				var x = span.offsetLeft + span.offsetWidth / 2
+				var y = span.offsetTop + span.offsetHeight / 2 + wrap.offsetTop
+				// a边的长度
+				var diffx = mouseX - x
+				// b边的长度
+				var diffy = mouseY - y
+				// c边的长度
+				var distance = Math.sqrt(Math.pow(diffx, 2) + Math.pow(diffy, 2))
+				// 图标的大小系数
+				var val = input[i].value = 1 - Math.floor(distance) / 300
+				if (val < 0.5 || val <= 0) {
+					val = 0.5
+				}
+				span.style.width = (128 * val) + 'px'
+				span.style.height = (128 * val) + 'px'
+				// console.log(span.width)
+			}
+		})
+	</script>
+</body>
+
+</html>
