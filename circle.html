@@ -55,6 +55,7 @@
                 left: left + r + a,
                 top: top + r - b
             })
+            // 使用requestAnimationFrame会更加流畅，相比setInterval
             window.requestAnimationFrame(draw)
         }
         draw()
