@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>眼睛</title>
+    <style>
+        .smile {
+            width: 300px;
+            height: 300px;
+            background-image: url('./img/smile.jpg');
+            margin: 0 auto;
+            margin-top: 100px;
+            position: relative;
+        }
+
+        .wrap {
+            width: 30px;
+            height: 30px;
+            /* border: 1px solid #fff; */
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .wrap1 {
+            left: 85px;
+            top: 80px;
+        }
+
+        .wrap2 {
+            left: 180px;
+            top: 80px;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background-color: #ffffff;
+            position: absolute;
+            border-radius: 50%;
+            left: 50px;
+            top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="smile">
+        <div class="wrap wrap1">
+            <div class="dot dot1"></div>
+        </div>
+        <div class="wrap wrap2">
+            <div class="dot dot2"></div>
+        </div>
+    </div>
+
+    <script src="./lib/jquery-2.0.3.js"></script>
+    <script>
+        // 旋转轨道的left和top值，也就是图中offsetX和offsetY
+        var wLeft = $('.wrap').offset().left
+        var wTop = $('.wrap').offset().top
+        // 眼睛的left和top值
+        // var dLeft = $('.dot').offset().left
+        // var dTop = $('.dot').offset().top
+        // 旋转轨道的半径
+        var r = 12
+        document.addEventListener('mousemove', function (ev) {
+            var deg = getDirection(ev)
+            // console.log(deg * (180 / Math.PI))
+            var x = Math.cos(deg) * r
+            var y = Math.sin(deg) * r
+            $('.dot').css({
+                left: (r + x) + 'px',
+                top: (r + y) + 'px'
+            })
+        })
+
+        function getDirection(ev) {
+            // console.log(ev.pageX, ev.pageY)
+            // b边的长度
+            var diffX = ev.pageX - (wLeft + r)
+            // a边的长度
+            var diffY = ev.pageY - (wTop + r)
+            // 弧度α
+            var deg = Math.atan(Math.abs(diffY) / Math.abs(diffX))
+            var result = 0
+            // 在3、4象限
+            if (ev.pageY - (wTop + r) > 0) {
+                // 在第4象限
+                if (diffX > 0) {
+                    result = deg
+                } else {
+                    result = Math.PI - deg
+                }
+            } else {
+                // 在第1象限
+                if (diffX > 0) {
+                    result = 2 * Math.PI - deg
+                } else {
+                    result = Math.PI + deg
+                }
+            }
+            return result
+        }
+    </script>
+</body>
+
+</html>
