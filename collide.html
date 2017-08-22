@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>碰撞检测</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .ball-1 {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: rgba(128, 98, 44, 0.5);
+        position: absolute;
+        left: 400px;
+        top: 200px;
+    }
+
+    .ball-2 {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: rgba(8, 198, 144, 0.5);
+        position: absolute;
+        left: 600px;
+        top: 50px;
+    }
+</style>
+
+<body>
+    <div class="ball-1"></div>
+    <div class="ball-2"></div>
+    <script src="./lib/jquery-2.0.3.js"></script>
+    <script>
+        var $b1 = $('.ball-1')
+        var $b2 = $('.ball-2')
+        // ball-1半径
+        var r1 = $b1.width() / 2
+        // ball-2半径
+        var r2 = $b2.width() / 2
+        // ball-1的left和top初始值
+        var initLeft = $b1.offset().left
+        var initTop = $b1.offset().top
+        // 球的运动速度
+        var speedX = 2
+        var speedY = 0
+        // 是否已碰撞
+        var isCollide = false
+
+        function move() {
+            // ball-1的圆心offsetLeft
+            var left1 = $b1.offset().left + r1
+            var top1 = $b1.offset().top + r1
+            // ball-2的圆心offsetLeft
+            var left2 = $b2.offset().left + r2
+            var top2 = $b2.offset().top + r2
+            // 也就是博客中的a边和b边
+            var diffX = Math.abs(left2 - left1)
+            var diffY = Math.abs(top2 - top1)
+            var deg = Math.atan(diffY / diffX)
+            // 两球心的距离
+            var distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2))
+            // 碰撞条件
+            if (distance < (r1 + r2) && isCollide == false) {
+                isCollide = true
+                console.log('collide')
+            }
+            if (isCollide) {
+                // 对speedX分解得到的两个速度
+                var s1 = Math.cos(deg) * speedX
+                var s2 = Math.sin(deg) * speedX
+                // 对s1进行水平和垂直分解
+                var s11 = Math.cos(deg) * s1
+                var s12 = Math.sin(deg) * s1
+                // 对s2进行水平和垂直分解
+                var s21 = Math.sin(deg) * s2
+                var s22 = Math.cos(deg) * s2
+                // 最终的叠加的水平速度和垂直速度
+                speedX = (s11 - s21) * -1
+                speedY = s12 + s22
+                isCollide = false
+            }
+            // 使用requestAnimationFrame的性能要比setInterval要好
+            window.requestAnimationFrame(move)
+
+            $b1.css({
+                left: initLeft += speedX,
+                top: initTop += speedY
+            })
+        }
+        move()
+    </script>
+</body>
+
+</html>

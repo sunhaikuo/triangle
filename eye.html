@@ -69,7 +69,9 @@
         document.addEventListener('mousemove', function (ev) {
             var deg = getDirection(ev)
             // console.log(deg * (180 / Math.PI))
+            // 内三角形的邻边
             var x = Math.cos(deg) * r
+            // 内三角形的对边
             var y = Math.sin(deg) * r
             $('.dot').css({
                 left: (r + x) + 'px',
